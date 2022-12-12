@@ -3,29 +3,31 @@ pipeline {
 agent any
 
 stages {
-	stage('SCM'){
-		steps {
-			echo "git pull my code step1"
-			echo "git pull my code step2"
-              	}
-	}
-	stage('Deploy') {
-		steps {
-			echo "Deploying pull my code"
-         	      }
+	stage('SCM') {
+		steps  {
+			echo "git pull my code for java app"
+		        git 'https://github.com/vimallinuxworld13/simple-java-maven-app.git'
+		}
 	}
 
-	stage('Test'){
+	stage('Build') {
+		steps { 
+			sh 'mvn clean package'
+		}
+	}	
+
+	stage('Deploy') {
 		steps {
-			echo "Test my final code"
-               	}
-      	}
-	
-	stage('Deploy To Production'){
-			steps {
-				echo "my final webapp to prod"
-               		}
-      	
+			sh 'java -jar target/*.jar'
+		}
 	}
+
+	stage('Deploy to Prod') {
+		steps {
+			echo "my final webapp to prod"
+		}
+	}
+
 }
- 
+
+}
